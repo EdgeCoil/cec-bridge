@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "cb")(type "KiCad")(uri "${KIPRJMOD}/../lib/cb.pretty")(options "")(descr "LCSC parts via easyeda2kicad"))
+)

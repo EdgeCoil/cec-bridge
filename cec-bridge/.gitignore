@@ -1,0 +1,7 @@
+cec-bridge/fab/
+*-unrouted.kicad_pcb
+*-best.kicad_pcb
+*.dsn
+*.ses
+*.kicad_prl
+fp-info-cache
