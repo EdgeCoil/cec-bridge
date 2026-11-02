@@ -1,0 +1,78 @@
+# SPDX-FileCopyrightText: 2026 edgecoil
+# SPDX-License-Identifier: MIT
+#
+# Rebuild the board from source on every push and pull request, and prove the rebuild is the
+# committed board. The routing is frozen (cec-bridge/routing.json), so this replays it: no
+# autorouter, no Java. KiCad is pinned by digest because a different KiCad can change the output.
+name: build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  board:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    container:
+      image: kicad/kicad:9.0.2-full@sha256:e26b62eefe0a54d54c850bddc089162a585d2ba01180bd9659efcc9e1ba689ef
+      options: --user root
+    env:
+      TZ: UTC
+      KICAD_SYMBOL_DIR: /usr/share/kicad/symbols
+      KICAD_FOOTPRINT_DIR: /usr/share/kicad/footprints
+      PYTHONPATH: ${{ github.workspace }}/vendor
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Tools the generator needs beyond KiCad
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq --no-install-recommends librsvg2-bin python3-pil curl ca-certificates >/dev/null
+          kicad-cli version
+          python3 -c "import pcbnew; print('pcbnew', pcbnew.Version())"
+
+      - name: Keep the committed board for comparison
+        run: |
+          mkdir -p /tmp/committed
+          cp cec-bridge/cec-bridge/cec-bridge.kicad_pcb cec-bridge/cec-bridge/cec-bridge.kicad_pro \
+             cec-bridge/cec-bridge/cec-bridge.kicad_dru /tmp/committed/
+
+      - name: Build (generate, replay routing, ERC, DRC with schematic parity, fab files)
+        run: ./cec-bridge/build.sh
+
+      - name: The rebuild is the committed board
+        run: python3 -m edgecoil_pcb.canon /tmp/committed/cec-bridge.kicad_pcb cec-bridge/cec-bridge/cec-bridge.kicad_pcb
+
+      - name: Negative control - canon must fail on a via moved by 1 um
+        run: |
+          mkdir -p /tmp/nudged
+          python3 ci/nudge_via.py /tmp/committed/cec-bridge.kicad_pcb /tmp/nudged/cec-bridge.kicad_pcb
+          cp /tmp/committed/cec-bridge.kicad_pro /tmp/committed/cec-bridge.kicad_dru /tmp/nudged/
+          if python3 -m edgecoil_pcb.canon /tmp/committed/cec-bridge.kicad_pcb /tmp/nudged/cec-bridge.kicad_pcb >/dev/null 2>&1; then
+            echo "canon passed a moved via: the comparison is testing nothing"; exit 1
+          fi
+          echo "canon caught the moved via"
+
+      - name: Fab outputs present, sized and UTC
+        run: python3 ci/check_outputs.py cec-bridge/cec-bridge/fab cec-bridge
+
+      - name: JLC placements against JLC's own footprints
+        run: python3 -m edgecoil_pcb.jlc_verify cec-bridge/cec-bridge/cec-bridge.kicad_pcb
+
+      - name: Keep the fab files
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: cec-bridge-fab
+          path: |
+            cec-bridge/cec-bridge/fab/*.zip
+            cec-bridge/cec-bridge/fab/*.csv
+            cec-bridge/cec-bridge/fab/*.pdf
+            cec-bridge/cec-bridge/fab/*.rpt
+          retention-days: 14

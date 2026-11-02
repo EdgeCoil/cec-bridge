@@ -20,7 +20,7 @@ SPDX-FileCopyrightText = "2026 edgecoil"
 SPDX-License-Identifier = "LicenseRef-edgecoil-trademark"
 
 [[annotations]]
-path = ["vendor/**"]
+path = ["vendor/**", "ci/**", ".github/**"]
 precedence = "closest"
 SPDX-FileCopyrightText = "2026 edgecoil"
 SPDX-License-Identifier = "MIT"
