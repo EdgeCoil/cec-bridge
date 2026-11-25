@@ -1,0 +1,5 @@
+# Derived from the KiCad board by regenerate.sh (large; not committed).
+*.step
+*.stl
+parts/
+board-facts.json

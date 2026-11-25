@@ -1,0 +1,171 @@
+{
+ "scad": "enclosure.scad",
+ "print_parts": {
+  "base.stl": "base_print",
+  "lid.stl": "lid_print"
+ },
+ "assembled_parts": [
+  "base",
+  "lid"
+ ],
+ "board_offset": [
+  0,
+  0,
+  5.0
+ ],
+ "collision_parts": [
+  "base_keepout_check",
+  "lid_keepout_check",
+  "base_lid_overlap_check",
+  {
+   "part": "insertion_check",
+   "defines": {
+    "lid_x_shift": 1.4,
+    "lid_z_shift": 10
+   }
+  },
+  {
+   "part": "insertion_check",
+   "defines": {
+    "lid_x_shift": 1.4,
+    "lid_z_shift": 5
+   }
+  },
+  {
+   "part": "insertion_check",
+   "defines": {
+    "lid_x_shift": 1.4,
+    "lid_z_shift": 2
+   }
+  },
+  {
+   "part": "insertion_check",
+   "defines": {
+    "lid_x_shift": 1.4,
+    "lid_z_shift": 1
+   }
+  },
+  {
+   "part": "insertion_check",
+   "defines": {
+    "lid_x_shift": 1.4,
+    "lid_z_shift": 0.5
+   }
+  },
+  {
+   "part": "insertion_check",
+   "defines": {
+    "lid_x_shift": 1.4,
+    "lid_z_shift": 0
+   }
+  },
+  {
+   "part": "insertion_check",
+   "defines": {
+    "lid_x_shift": 1.0,
+    "lid_z_shift": 0
+   }
+  },
+  {
+   "part": "insertion_check",
+   "defines": {
+    "lid_x_shift": 0.6,
+    "lid_z_shift": 0
+   }
+  },
+  {
+   "part": "insertion_check",
+   "defines": {
+    "lid_x_shift": 0.2,
+    "lid_z_shift": 0
+   }
+  },
+  {
+   "part": "insertion_check",
+   "defines": {
+    "lid_x_shift": 0,
+    "lid_z_shift": 0
+   }
+  }
+ ],
+ "insertion_poses": [
+  {
+   "dx": 1.4,
+   "dz": 10
+  },
+  {
+   "dx": 1.4,
+   "dz": 5
+  },
+  {
+   "dx": 1.4,
+   "dz": 2
+  },
+  {
+   "dx": 1.4,
+   "dz": 1
+  },
+  {
+   "dx": 1.4,
+   "dz": 0.5
+  },
+  {
+   "dx": 1.4,
+   "dz": 0
+  },
+  {
+   "dx": 1.0,
+   "dz": 0
+  },
+  {
+   "dx": 0.6,
+   "dz": 0
+  },
+  {
+   "dx": 0.2,
+   "dz": 0
+  },
+  {
+   "dx": 0,
+   "dz": 0
+  }
+ ],
+ "test_parts": [
+  "test_hook_base",
+  "test_hook_lid",
+  "test_h2_hook_base",
+  "test_h2_hook_lid"
+ ],
+ "previews": [
+  "previews/assembly.png",
+  "previews/base_print.png",
+  "previews/lid_print.png",
+  "previews/section_hdmi.png",
+  "previews/section_antenna.png",
+  "previews/top_antenna.png",
+  "previews/section_hook.png"
+ ],
+ "assembly_path": {
+  "moving": "lid",
+  "fixed": [
+   "base"
+  ],
+  "poses": [
+   [
+    1.4,
+    10,
+    0
+   ],
+   [
+    1.4,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    0
+   ]
+  ]
+ }
+}

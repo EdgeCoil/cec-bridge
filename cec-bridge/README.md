@@ -90,6 +90,33 @@ and writes JLC's BOM and placement files to `cec-bridge/fab/`. Reviewed in audit
    VBUS through R20); JST-PH lead colours aren't consistent between suppliers. Each LED takes about 80 mA pulses through 47 Ω. The receiver sits 6 mm from the on-board
    LED and hears its own transmissions; ignore received codes while transmitting.
 
+## Enclosure
+
+A two-part 3D-printed case in [`enclosure/`](enclosure/): `base.stl` and `lid.stl`, print-oriented, from
+the parametric OpenSCAD source `enclosure.scad` (OpenSCAD 2021.01 or later). Printed and fitted in PLA.
+
+| | |
+|---|---|
+| ![Closed](enclosure/photos/enclosure-closed.jpg) | ![Parts](enclosure/photos/enclosure-parts.jpg) |
+| ![Board in the base](enclosure/photos/enclosure-board-in-base.jpg) | ![Base with inserts](enclosure/photos/enclosure-base-inserts.jpg) |
+
+- **Hardware:** 2 × M3 × 8 socket-head cap screws, 2 × M3 × 5.7 × 4.6 mm heat-set inserts (pressed into
+  the base's two ears; `insert_hole_d` = 4.0 mm, raise it to 4.1–4.2 if your filament is stiff).
+- **No metal near the board:** the board sits on printed locating pins and is clamped by plastic posts
+  at H1 and H2 (H1 has a 3V3 track 1.6 mm from its centre); both screws are in ears outside the board,
+  at least 10 mm from the module's antenna.
+- **Assembly:** seat the board on the base's pins; lower the lid about 1.4 mm to the right of its final
+  position so the two hooks on its right edge clear the base wall, slide it left until they catch under
+  the window lintels, then tighten the two screws on the left.
+- The lid backs the HDMI-type socket (a rib behind it takes the plug's insertion force), has windows
+  over the IR LED and receiver and a hole over the status LED, pinholes for RESET and BOOT, and a "+"
+  by the IR emitter socket.
+- `make_outputs.sh` rebuilds the STLs and previews and checks, by intersection volume, that neither
+  part touches the board or its parts, that the lid and base don't overlap, and that the lid clears
+  everything along its fitting path. `NOTES.md` lists the fit assumptions to test on a first print.
+- The board model the checks use (`enclosure/board-model/`) is derived from the KiCad board by
+  `board-model/regenerate.sh` and isn't committed.
+
 ## Firmware notes
 
 - Keep ESPHome's brown-out detector on (the default): a dropout of a few ms takes 3V3 low without

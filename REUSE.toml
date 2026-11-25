@@ -30,3 +30,15 @@ path = ["REUSE.toml", "cec-bridge/.gitignore"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2026 edgecoil"
 SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = ["cec-bridge/enclosure/photos/**", "cec-bridge/enclosure/NOTES.md"]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 edgecoil"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = ["cec-bridge/enclosure/board-model/.gitignore"]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 edgecoil"
+SPDX-License-Identifier = "CC0-1.0"
